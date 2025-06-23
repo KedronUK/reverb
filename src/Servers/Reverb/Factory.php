@@ -57,8 +57,14 @@ class Factory
 
         $uri = static::usesTls($options['tls']) ? "tls://{$host}:{$port}" : "{$host}:{$port}";
 
+        $socketServer = new SocketServer($uri, $options, $loop);
+        $socketServer->on('error', function ($error) {
+            // Step 1: add websocket connection error message in notification | check Step 2 add connection check on each channel connection
+            checkStatusToCreateJournalingAndNotification($error->getMessage());
+        })
+
         return new HttpServer(
-            new SocketServer($uri, $options, $loop),
+            $socketServer,
             $router,
             $maxRequestSize,
             $loop

@@ -58,6 +58,14 @@ class Server
             return;
         }
 
+        // add delay only for those OS which have version 8.* So Websocket SSL connection can be established
+        $osDetails = getOperatingSystemDetails();
+        // $osDetails['ID'] === 'rhel'
+        if ($osDetails !== [] && Str::startsWith($osDetails['VERSION_ID'], '8.')) {
+            echo 'Delay added for ' . $osDetails['PRETTY_NAME'] . "\n";
+            time_nanosleep(0, 40000000);
+        }
+
         $connection->connect();
 
         try {

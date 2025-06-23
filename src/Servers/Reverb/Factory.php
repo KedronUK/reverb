@@ -61,7 +61,7 @@ class Factory
         $socketServer->on('error', function ($error) {
             // Step 1: add websocket connection error message in notification | check Step 2 add connection check on each channel connection
             checkStatusToCreateJournalingAndNotification($error->getMessage());
-        })
+        });
 
         return new HttpServer(
             $socketServer,
